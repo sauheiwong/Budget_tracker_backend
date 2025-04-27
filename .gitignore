@@ -2,3 +2,5 @@
 .env
 node_modules
 test_image
+material
+.gitignore
