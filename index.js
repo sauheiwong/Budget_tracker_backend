@@ -1,7 +1,8 @@
-// const express = require("express");
 import express from "express";
-const app = express();
 import { geminiAPI } from "./gemini.js";
+import "./database.js";
+
+const app = express();
 
 const AI = {};
 
@@ -15,19 +16,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/home", (req, res) => {
-  res.status(200).send("welcome home");
-});
-
-app.get("/api/users", (req, res) => {
-  const name = req.query.name;
-  const age = req.query.age;
-  console.log(`收到的資料：姓名=${name}, 年齡=${age}`);
-  const data = {
-    name,
-    age,
-    message: "Welcome new user",
-  };
-  res.json(data);
+  res.status(200).send("<h1>welcome home</h1>");
 });
 
 app.get("/api/gemini", async (req, res) => {
@@ -37,8 +26,9 @@ app.get("/api/gemini", async (req, res) => {
     console.log(AI);
     if (AI.chat != null) {
       [text, chat] = await geminiAPI(message, AI.chat);
+    } else {
+      [text, chat] = await geminiAPI(message);
     }
-    [text, chat] = await geminiAPI(message);
     AI.chat = chat;
     res.json({ result: text });
   } catch (err) {
